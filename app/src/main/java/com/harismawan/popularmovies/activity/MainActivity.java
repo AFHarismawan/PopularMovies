@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData(String category) {
         showProgress();
-        helper.getMovies(category, getString(R.string.api_key)).enqueue(new Callback<ListMovies>() {
+        helper.getMovies(category, Constants.API_KEY).enqueue(new Callback<ListMovies>() {
 
             @Override
             public void onResponse(Call<ListMovies> call, Response<ListMovies> response) {

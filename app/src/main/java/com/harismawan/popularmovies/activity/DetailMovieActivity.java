@@ -67,7 +67,7 @@ public class DetailMovieActivity extends AppCompatActivity {
         Picasso.with(this).load(Constants.IMAGE_BASE_URL + this.movie.imageUrl).into(image);
         movieTitle.setText(movie.title);
         movieYear.setText(movie.releaseDate.split("-")[0]);
-        movieDuration.setText(Integer.toString(movie.runtime));
+        movieDuration.setText(movie.runtime + " min");
         movieRating.setText(movie.voteAverage + "/10");
         movieDesc.setText(movie.desc);
 
@@ -76,7 +76,7 @@ public class DetailMovieActivity extends AppCompatActivity {
 
     private void loadData(int id) {
         showProgress();
-        helper.getMovieDetail(id, getString(R.string.api_key)).enqueue(new Callback<Movie>() {
+        helper.getMovieDetail(id, Constants.API_KEY).enqueue(new Callback<Movie>() {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Log.d("response", response.toString());
