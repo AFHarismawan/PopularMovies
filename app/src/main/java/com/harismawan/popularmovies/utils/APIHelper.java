@@ -1,6 +1,8 @@
 package com.harismawan.popularmovies.utils;
 
 import com.harismawan.popularmovies.model.ListMovies;
+import com.harismawan.popularmovies.model.ListReviews;
+import com.harismawan.popularmovies.model.ListVideos;
 import com.harismawan.popularmovies.model.Movie;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,4 +16,10 @@ public interface APIHelper {
 
     @GET("movie/{id}")
     Call<Movie> getMovieDetail(@Path("id") int id, @Query("api_key") String apiKey);
+
+    @GET("movie/{id}/reviews")
+    Call<ListReviews> getMovieReviews(@Path("id") int id, @Query("api_key") String apiKey);
+
+    @GET("movie/{id}/videos")
+    Call<ListVideos> getMovieVideos(@Path("id") int id, @Query("api_key") String apiKey);
 }

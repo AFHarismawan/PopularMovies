@@ -14,28 +14,25 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import com.harismawan.popularmovies.R;
-import com.harismawan.popularmovies.adapter.RecyclerAdapter;
+import com.harismawan.popularmovies.adapter.MovieRecyclerAdapter;
 import com.harismawan.popularmovies.config.Constants;
+import com.harismawan.popularmovies.database.DatabaseHelper;
 import com.harismawan.popularmovies.model.ListMovies;
-import com.harismawan.popularmovies.model.Movie;
 import com.harismawan.popularmovies.utils.APIHelper;
 import com.harismawan.popularmovies.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
 
     private APIHelper helper;
 
-    private ArrayList<Movie> movies = new ArrayList<>();
     private RelativeLayout root;
     private ProgressBar progress;
     private RecyclerView mRecyclerView;
-    private GridLayoutManager mGridLayoutManager;
-    private RecyclerAdapter adapter;
+    private MovieRecyclerAdapter adapter;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +43,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
 
+        db = new DatabaseHelper(this);
         helper = Utils.getAPIHelper();
 
         root = (RelativeLayout) findViewById(R.id.root);
         progress = (ProgressBar) findViewById(R.id.progress);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_grid);
-        mGridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        adapter = new RecyclerAdapter(movies);
+        adapter = new MovieRecyclerAdapter(null);
         mRecyclerView.setAdapter(adapter);
 
         if (Utils.isConnected(this)) {
@@ -109,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.top_rated_movies:
                 loadData(Constants.CATEGORY_TOP_RATED);
+                return true;
+            case R.id.favorite_movies:
+                adapter.updateData(db.getFavorite());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

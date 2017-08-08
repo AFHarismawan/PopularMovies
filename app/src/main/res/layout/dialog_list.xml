@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/movie_videos"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dialog_content_height"
+            android:scrollbars="vertical"
+            android:overScrollMode="never"
+            android:padding="@dimen/margin_default"/>
+
+    <ProgressBar
+            android:id="@+id/progress_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_20dp"
+            android:layout_centerInParent="true"/>
+
+    <Button
+            android:id="@+id/button_close"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_margin="@dimen/margin_default"
+            android:layout_below="@+id/movie_videos"
+            android:textSize="@dimen/content_text_size"
+            android:background="@drawable/button_background"
+            android:textColor="@color/colorWhite"
+            android:text="@string/button_close"/>
+
+</RelativeLayout>

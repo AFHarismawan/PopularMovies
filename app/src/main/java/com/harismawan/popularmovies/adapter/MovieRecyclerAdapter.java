@@ -9,11 +9,11 @@ import com.harismawan.popularmovies.model.Movie;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<MovieHolder> {
+public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieHolder> {
 
     private ArrayList<Movie> movies;
 
-    public RecyclerAdapter(ArrayList<Movie> movies) {
+    public MovieRecyclerAdapter(ArrayList<Movie> movies) {
         this.movies = movies;
     }
 
@@ -27,7 +27,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<MovieHolder> {
     @Override
     public void onBindViewHolder(MovieHolder holder, int position) {
         Movie movie = movies.get(position);
-        holder.bindMovie(movie);
+        holder.bind(movie);
     }
 
     @Override

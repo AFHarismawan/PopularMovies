@@ -6,6 +6,7 @@ public class Constants {
 
     public static String BASE_URL = "https://api.themoviedb.org/3/";
     public static String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185";
+    public static String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
 
     public static String API_KEY = BuildConfig.API_KEY;
 

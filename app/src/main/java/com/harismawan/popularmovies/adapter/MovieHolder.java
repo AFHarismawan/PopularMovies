@@ -22,9 +22,10 @@ public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClick
         image.setOnClickListener(this);
     }
 
-    public void bindMovie(Movie movie) {
+    public void bind(Movie movie) {
         this.movie = movie;
-        Picasso.with(image.getContext()).load(Constants.IMAGE_BASE_URL + this.movie.imageUrl).into(image);
+        Picasso.with(image.getContext()).load(Constants.IMAGE_BASE_URL + this.movie.imageUrl)
+                .placeholder(R.mipmap.ic_placeholder).error(R.mipmap.ic_error_placeholder).into(image);
     }
 
     @Override

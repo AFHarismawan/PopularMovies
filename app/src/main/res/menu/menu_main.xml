@@ -8,4 +8,8 @@
     <item android:id="@+id/top_rated_movies"
           android:title="@string/menu_top_rated"
           android:orderInCategory="2"/>
+
+    <item android:id="@+id/favorite_movies"
+          android:title="@string/menu_favorite_movies"
+          android:orderInCategory="3"/>
 </menu>
