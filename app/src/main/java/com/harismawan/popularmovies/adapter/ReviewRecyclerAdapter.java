@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.harismawan.popularmovies.R;
 import com.harismawan.popularmovies.model.Review;
+import com.harismawan.popularmovies.viewholder.ReviewHolder;
 
 import java.util.ArrayList;
 

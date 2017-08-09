@@ -1,4 +1,4 @@
-package com.harismawan.popularmovies.adapter;
+package com.harismawan.popularmovies.viewholder;
 
 import android.content.Context;
 import android.content.Intent;

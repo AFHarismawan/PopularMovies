@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.harismawan.popularmovies.R;
 import com.harismawan.popularmovies.adapter.ReviewRecyclerAdapter;
 import com.harismawan.popularmovies.adapter.VideoRecyclerAdapter;
@@ -21,6 +23,9 @@ import com.harismawan.popularmovies.model.ListVideos;
 import com.harismawan.popularmovies.model.Movie;
 import com.harismawan.popularmovies.utils.APIHelper;
 import com.harismawan.popularmovies.utils.Utils;
+import com.harismawan.popularmovies.viewholder.DialogAlertHolder;
+import com.harismawan.popularmovies.viewholder.DialogHeaderHolder;
+import com.harismawan.popularmovies.viewholder.DialogListHolder;
 import com.squareup.picasso.Picasso;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,28 +33,34 @@ import retrofit2.Response;
 
 public class DetailMovieActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.root) RelativeLayout root;
+    @BindView(R.id.card_view) CardView cardView;
+    @BindView(R.id.progress) ProgressBar progress;
+    @BindView(R.id.image) ImageView image;
+    @BindView(R.id.movie_title) TextView movieTitle;
+    @BindView(R.id.movie_year) TextView movieYear;
+    @BindView(R.id.movie_duration) TextView movieDuration;
+    @BindView(R.id.movie_rating) TextView movieRating;
+    @BindView(R.id.movie_desc) TextView movieDesc;
+    @BindView(R.id.button_fav) Button favorite;
+    @BindView(R.id.button_videos) Button video;
+    @BindView(R.id.movie_reviews) RecyclerView movieReviews;
+
     private APIHelper helper;
-
     private Movie movie;
-
-    private RelativeLayout root;
-    private CardView cardView;
-    private ProgressBar progress, progressDialog;
-    private ImageView image;
-    private TextView movieTitle, movieYear, movieDuration, movieRating, movieDesc;
     private ReviewRecyclerAdapter adapter;
-    private RecyclerView videos;
     private AlertDialog dialog;
-    private Button close;
-    private RecyclerView movieReviews;
     private DatabaseHelper db;
+    private DialogListHolder list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_movies);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_detail_movies);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,19 +72,8 @@ public class DetailMovieActivity extends AppCompatActivity {
         db = new DatabaseHelper(this);
         helper = Utils.getAPIHelper();
 
-        root = (RelativeLayout) findViewById(R.id.root);
-        cardView = (CardView) findViewById(R.id.card_view);
         cardView.setVisibility(View.GONE);
-        progress = (ProgressBar) findViewById(R.id.progress);
 
-        image = (ImageView) findViewById(R.id.image);
-        movieTitle = (TextView) findViewById(R.id.movie_title);
-        movieYear = (TextView) findViewById(R.id.movie_year);
-        movieDuration = (TextView) findViewById(R.id.movie_duration);
-        movieRating = (TextView) findViewById(R.id.movie_rating);
-        movieDesc = (TextView) findViewById(R.id.movie_desc);
-
-        Button favorite = (Button) findViewById(R.id.button_fav);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +82,6 @@ public class DetailMovieActivity extends AppCompatActivity {
             }
         });
 
-        Button video = (Button) findViewById(R.id.button_videos);
         video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +89,6 @@ public class DetailMovieActivity extends AppCompatActivity {
             }
         });
 
-        movieReviews = (RecyclerView) findViewById(R.id.movie_reviews);
         LinearLayoutManager mListLayoutManager = new LinearLayoutManager(this);
         movieReviews.setLayoutManager(mListLayoutManager);
 
@@ -152,11 +150,11 @@ public class DetailMovieActivity extends AppCompatActivity {
         helper.getMovieVideos(id, Constants.API_KEY).enqueue(new Callback<ListVideos>() {
             @Override
             public void onResponse(Call<ListVideos> call, Response<ListVideos> response) {
-                progressDialog.setVisibility(View.GONE);
-                videos.setVisibility(View.VISIBLE);
-                close.setVisibility(View.VISIBLE);
+                list.progressDialog.setVisibility(View.GONE);
+                list.videos.setVisibility(View.VISIBLE);
+                list.close.setVisibility(View.VISIBLE);
 
-                videos.setAdapter(new VideoRecyclerAdapter(response.body().videos));
+                list.videos.setAdapter(new VideoRecyclerAdapter(response.body().videos));
             }
 
             @Override
@@ -171,20 +169,23 @@ public class DetailMovieActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         View v = getLayoutInflater().inflate(R.layout.dialog_header, null, false);
-        TextView title = v.findViewById(R.id.title);
-        title.setText(R.string.success);
+
+        DialogHeaderHolder header = new DialogHeaderHolder(v);
+        header.title.setText(R.string.success);
+
         builder.setCustomTitle(v);
 
         View vv = getLayoutInflater().inflate(R.layout.dialog_alert, null, false);
-        builder.setView(vv);
 
-        Button ok = vv.findViewById(R.id.button_ok);
-        ok.setOnClickListener(new View.OnClickListener() {
+        DialogAlertHolder content = new DialogAlertHolder(vv);
+        content.ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.cancel();
             }
         });
+
+        builder.setView(vv);
 
         dialog = builder.create();
         dialog.show();
@@ -194,22 +195,21 @@ public class DetailMovieActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         View v = getLayoutInflater().inflate(R.layout.dialog_header, null, false);
-        TextView title = v.findViewById(R.id.title);
-        title.setText(R.string.button_videos);
+
+        DialogHeaderHolder header = new DialogHeaderHolder(v);
+        header.title.setText(R.string.button_videos);
+
         builder.setCustomTitle(v);
 
         View vv = getLayoutInflater().inflate(R.layout.dialog_list, null, false);
 
-        progressDialog = vv.findViewById(R.id.progress_dialog);
-
-        videos = vv.findViewById(R.id.movie_videos);
+        list = new DialogListHolder(vv);
         LinearLayoutManager mListLayoutManager = new LinearLayoutManager(this);
-        videos.setLayoutManager(mListLayoutManager);
-        videos.setVisibility(View.GONE);
+        list.videos.setLayoutManager(mListLayoutManager);
+        list.videos.setVisibility(View.GONE);
 
-        close = vv.findViewById(R.id.button_close);
-        close.setVisibility(View.GONE);
-        close.setOnClickListener(new View.OnClickListener() {
+        list.close.setVisibility(View.GONE);
+        list.close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.cancel();

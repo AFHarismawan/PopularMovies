@@ -12,5 +12,7 @@ public class Constants {
 
     public static String CATEGORY_POPULAR = "popular";
     public static String CATEGORY_TOP_RATED = "top_rated";
+    public static String CATEGORY_FAVORITE = "favorite";
     public static String EXTRA_KEY_ID = "id";
+    public static String EXTRA_KEY_SAVED_INSTANCE = "instance";
 }

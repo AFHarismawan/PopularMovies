@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.harismawan.popularmovies.R;
 import com.harismawan.popularmovies.adapter.MovieRecyclerAdapter;
 import com.harismawan.popularmovies.config.Constants;
@@ -26,30 +28,29 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private APIHelper helper;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.root) RelativeLayout root;
+    @BindView(R.id.progress) ProgressBar progress;
+    @BindView(R.id.recycler_grid) RecyclerView mRecyclerView;
 
-    private RelativeLayout root;
-    private ProgressBar progress;
-    private RecyclerView mRecyclerView;
+    private APIHelper helper;
     private MovieRecyclerAdapter adapter;
     private DatabaseHelper db;
+    private String instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
 
         db = new DatabaseHelper(this);
         helper = Utils.getAPIHelper();
 
-        root = (RelativeLayout) findViewById(R.id.root);
-        progress = (ProgressBar) findViewById(R.id.progress);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_grid);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
@@ -57,7 +58,12 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
 
         if (Utils.isConnected(this)) {
-            loadData(Constants.CATEGORY_POPULAR);
+            if (savedInstanceState == null) {
+                instance = Constants.CATEGORY_POPULAR;
+            } else {
+                instance = savedInstanceState.getString(Constants.EXTRA_KEY_SAVED_INSTANCE, Constants.CATEGORY_POPULAR);
+            }
+            loadData(instance);
         } else {
             Snackbar.make(root, R.string.no_connection, Snackbar.LENGTH_INDEFINITE).show();
         }
@@ -93,6 +99,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(Constants.EXTRA_KEY_SAVED_INSTANCE, instance);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -103,12 +115,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.popular_movies:
-                loadData(Constants.CATEGORY_POPULAR);
+                instance = Constants.CATEGORY_POPULAR;
+                loadData(instance);
                 return true;
             case R.id.top_rated_movies:
-                loadData(Constants.CATEGORY_TOP_RATED);
+                instance = Constants.CATEGORY_TOP_RATED;
+                loadData(instance);
                 return true;
             case R.id.favorite_movies:
+                instance = Constants.CATEGORY_FAVORITE;
                 adapter.updateData(db.getFavorite());
                 return true;
             default:
