@@ -6,11 +6,14 @@
     <string name="no_connection">No Internet Connection!</string>
     <string name="fail_connect_api">Failed connect to API!</string>
     <string name="movie_reviews">Reviews</string>
-    <string name="success">SUCCESS</string>
+    <string name="added">ADDED</string>
+    <string name="removed">REMOVED</string>
     <string name="button_favorite">FAVORITE</string>
+    <string name="button_remove_favorite">REMOVE FAVORITE</string>
     <string name="button_videos">VIDEOS</string>
     <string name="button_close">CLOSE</string>
     <string name="menu_favorite_movies">Favorite Movies</string>
     <string name="button_ok">OK</string>
     <string name="save_success">Movies have been saved to favorites!</string>
+    <string name="delete_success">Movies have been removed from favorites!</string>
 </resources>

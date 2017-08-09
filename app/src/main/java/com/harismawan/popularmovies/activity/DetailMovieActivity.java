@@ -1,5 +1,7 @@
 package com.harismawan.popularmovies.activity;
 
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +19,7 @@ import com.harismawan.popularmovies.R;
 import com.harismawan.popularmovies.adapter.ReviewRecyclerAdapter;
 import com.harismawan.popularmovies.adapter.VideoRecyclerAdapter;
 import com.harismawan.popularmovies.config.Constants;
+import com.harismawan.popularmovies.contentprovider.FavoriteProvider;
 import com.harismawan.popularmovies.database.DatabaseHelper;
 import com.harismawan.popularmovies.model.ListReviews;
 import com.harismawan.popularmovies.model.ListVideos;
@@ -53,6 +56,7 @@ public class DetailMovieActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private DatabaseHelper db;
     private DialogListHolder list;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,20 +71,34 @@ public class DetailMovieActivity extends AppCompatActivity {
             setTitle(R.string.app_name);
         }
 
-        final int id = getIntent().getIntExtra(Constants.EXTRA_KEY_ID, 0);
+        id = getIntent().getIntExtra(Constants.EXTRA_KEY_ID, 0);
 
         db = new DatabaseHelper(this);
         helper = Utils.getAPIHelper();
 
         cardView.setVisibility(View.GONE);
 
-        favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                db.insertFavorite(movie);
-                showAlert();
-            }
-        });
+        int count = getContentResolver().query(Uri.parse(FavoriteProvider.CONTENT_URI + "/favorite/" + id),
+                null, null, null, null).getCount();
+        Log.d("count", count + "");
+        if (count != 0) {
+            favorite.setText(getString(R.string.button_remove_favorite));
+            favorite.setBackgroundResource(R.drawable.button_background_red);
+
+            favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteFavorite();
+                }
+            });
+        } else {
+            favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setFavorite();
+                }
+            });
+        }
 
         video.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +115,42 @@ public class DetailMovieActivity extends AppCompatActivity {
         } else {
             Snackbar.make(root, R.string.no_connection, Snackbar.LENGTH_INDEFINITE).show();
         }
+    }
+
+    private void setFavorite() {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_ID, movie.id);
+        values.put(DatabaseHelper.COLUMN_TITLE, movie.title);
+        values.put(DatabaseHelper.COLUMN_IMG_URL, movie.imageUrl);
+
+        getContentResolver().insert(Uri.parse(FavoriteProvider.CONTENT_URI + "/favorite"), values);
+
+        showAlert(getString(R.string.added));
+
+        favorite.setText(getString(R.string.button_remove_favorite));
+        favorite.setBackgroundResource(R.drawable.button_background_red);
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteFavorite();
+            }
+        });
+    }
+
+    private void deleteFavorite() {
+        getContentResolver().delete(Uri.parse(FavoriteProvider.CONTENT_URI + "/favorite/delete/" + id),
+                null, null);
+
+        showAlert(getString(R.string.removed));
+
+        favorite.setText(getString(R.string.button_favorite));
+        favorite.setBackgroundResource(R.drawable.button_background_green);
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setFavorite();
+            }
+        });
     }
 
     private void initView() {
@@ -165,19 +219,27 @@ public class DetailMovieActivity extends AppCompatActivity {
         });
     }
 
-    private void showAlert() {
+    private void showAlert(String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         View v = getLayoutInflater().inflate(R.layout.dialog_header, null, false);
 
         DialogHeaderHolder header = new DialogHeaderHolder(v);
-        header.title.setText(R.string.success);
+        header.title.setText(title);
 
         builder.setCustomTitle(v);
 
         View vv = getLayoutInflater().inflate(R.layout.dialog_alert, null, false);
 
         DialogAlertHolder content = new DialogAlertHolder(vv);
+        if (title.equals(getString(R.string.added))) {
+            content.image.setImageResource(R.mipmap.ic_check);
+            content.text.setText(getString(R.string.save_success));
+        } else {
+            content.image.setImageResource(R.mipmap.ic_cross);
+            content.text.setText(getString(R.string.delete_success));
+        }
+
         content.ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

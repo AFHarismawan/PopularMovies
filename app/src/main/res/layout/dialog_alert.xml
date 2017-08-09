@@ -6,18 +6,18 @@
     android:padding="@dimen/margin_default">
 
     <ImageView
+            android:id="@+id/image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/margin_default"
-            android:src="@mipmap/ic_check"/>
+            android:layout_marginBottom="@dimen/margin_default"/>
 
     <TextView
+            android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/content_text_size"
-            android:gravity="center"
-            android:text="@string/save_success"/>
+            android:gravity="center"/>
 
     <Button
             android:id="@+id/button_ok"

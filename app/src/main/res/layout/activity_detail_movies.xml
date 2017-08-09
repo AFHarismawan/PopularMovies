@@ -92,7 +92,7 @@
                             android:layout_below="@+id/movie_rating"
                             android:layout_toRightOf="@id/image"
                             android:textSize="@dimen/content_text_size"
-                            android:background="@drawable/button_background"
+                            android:background="@drawable/button_background_green"
                             android:textColor="@color/colorWhite"
                             android:text="@string/button_favorite"/>
 
