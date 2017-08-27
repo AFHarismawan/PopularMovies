@@ -8,20 +8,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.harismawan.popularmovies.R;
 import com.harismawan.popularmovies.config.Constants;
 import com.harismawan.popularmovies.model.Video;
 
 public class VideoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private final LinearLayout container;
+    @BindView(R.id.container) LinearLayout container;
+    @BindView(R.id.video_name) TextView name;
     private Video video;
-    private TextView name;
 
     public VideoHolder(View itemView) {
         super(itemView);
-        container = itemView.findViewById(R.id.container);
-        name = itemView.findViewById(R.id.video_name);
+        ButterKnife.bind(this, itemView);
     }
 
     public void bind(Video video) {

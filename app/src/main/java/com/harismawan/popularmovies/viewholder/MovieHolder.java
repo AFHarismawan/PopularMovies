@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.harismawan.popularmovies.activity.DetailMovieActivity;
 import com.harismawan.popularmovies.R;
 import com.harismawan.popularmovies.config.Constants;
@@ -13,12 +15,12 @@ import com.squareup.picasso.Picasso;
 
 public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private ImageView image;
+    @BindView(R.id.image) ImageView image;
     private Movie movie;
 
     public MovieHolder(View itemView) {
         super(itemView);
-        image = itemView.findViewById(R.id.image);
+        ButterKnife.bind(this, itemView);
         image.setOnClickListener(this);
     }
 

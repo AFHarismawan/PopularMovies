@@ -11,7 +11,7 @@ public class FavoriteProvider extends ContentProvider {
 
     private SQLiteDatabase db;
 
-    public static String AUTHORITY = "com.harismawan.popularmovies.contentprovider.FavoriteProvider";
+    private static String AUTHORITY = "com.harismawan.popularmovies.contentprovider.FavoriteProvider";
     public static String CONTENT_URI = "content://" + AUTHORITY;
 
     private static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/favorites";
