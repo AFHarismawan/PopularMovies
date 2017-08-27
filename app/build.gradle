@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-def getApiKey(String property){
+static def getApiKey(String property){
     Properties properties = new Properties()
     properties.load(new FileInputStream("/Users/harismawan/Developer/ApiKey/themoviedb"))
     return "\"" + properties.getProperty(property) +"\""
