@@ -17,3 +17,18 @@ Properties properties = new Properties()
 ```
 
 ### Screenshot:
++ Main menu
+
+![alt text](https://github.com/AFHarismawan/PopularMovies/blob/master/screenshot/Screenshot_1503812219.png)
++ Movie detail
+
+![alt text](https://github.com/AFHarismawan/PopularMovies/blob/master/screenshot/Screenshot_1503812230.png)
++ Add to favorite
+
+![alt text](https://github.com/AFHarismawan/PopularMovies/blob/master/screenshot/Screenshot_1503812233.png)
++ Remove from favorite
+
+![alt text](https://github.com/AFHarismawan/PopularMovies/blob/master/screenshot/Screenshot_1503812244.png)
++ Videos popup
+
+![alt text](https://github.com/AFHarismawan/PopularMovies/blob/master/screenshot/Screenshot_1503812251.png)
