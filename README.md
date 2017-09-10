@@ -1,4 +1,5 @@
 # Popular Movies
+Popular Movies project for Google Associate Android Developer Fast Track Nanodegree Program
 
 ### This project is using the following library:
 + <a href="http://square.github.io/picasso/">Picasso</a>
